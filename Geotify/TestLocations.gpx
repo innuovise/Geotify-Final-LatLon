@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="Xcode">
+  <wpt lat="37.422" lon="-122.084058">
+    <name>Google</name>
+  </wpt>
+  <wpt lat="37.331695" lon="-122.0322801">
+    <name>Apple</name>
+  </wpt>
+  <wpt lat="37.366037" lon="127.10809">
+    <name>정자역</name>
+  </wpt>
+  
+</gpx>
