@@ -22,6 +22,7 @@
 
 import UIKit
 import CoreLocation
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,11 +30,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   let locationManager = CLLocationManager()
   
+  let notificationCenter = UNUserNotificationCenter.current()
+  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:[UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
-    application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
-    UIApplication.shared.cancelAllLocalNotifications()
+    
+   // application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+    notificationCenter.requestAuthorization(options: [.sound, .alert, .badge], completionHandler:
+    {
+      (granted, error) in
+      if error == nil
+      {
+        UIApplication.shared.registerForRemoteNotifications()
+      }
+    })
+    
+    
+    //UIApplication.shared.cancelAllLocalNotifications()
+    notificationCenter.removeAllDeliveredNotifications()
+    
     return true
   }
   
@@ -44,10 +60,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       window?.rootViewController?.showAlert(withTitle: nil, message: message)
     } else {
       // Otherwise present a local notification
-      let notification = UILocalNotification()
-      notification.alertBody = note(fromRegionIdentifier: region.identifier)
-      notification.soundName = "Default"
-      UIApplication.shared.presentLocalNotificationNow(notification)
+      //let notification = UILocalNotification()
+      let notification = UNMutableNotificationContent()
+      
+      //notification.alertBody = note(fromRegionIdentifier: region.identifier)
+      notification.body = note(fromRegionIdentifier: region.identifier)!
+    
+      //notification.soundName = "Default"
+      notification.title = "Default"
+      
+      //UIApplication.shared.presentLocalNotificationNow(notification)
+      //UNNotificationPresentationOptions
     }
   }
   

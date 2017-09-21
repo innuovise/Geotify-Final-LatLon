@@ -28,6 +28,29 @@ protocol AddGeotificationsViewControllerDelegate {
     radius: Double, identifier: String, note: String, eventType: EventType)
 }
 
+//protocol RemoveGeotificationsViewControllerDelegate
+//{
+//  fun removeGeotificationViewController(controller: AddGeotificationViewController, )
+//}
+
+/** 
+ 
+ func remove(geotification: Geotification)
+ {
+    if let indexInArray = geotifications.index(of: geotification)
+    {
+      geotifications.remove(at: indexInArray)
+    }
+ 
+    mapView.removeAnnotation(geotification)
+    removeRadiusOverlay(forGeotification: geotification)
+    updateGeotificationsCount()
+ }
+ 
+ */
+
+
+
 class AddGeotificationViewController: UITableViewController {
 
   @IBOutlet var addButton: UIBarButtonItem!
@@ -41,9 +64,14 @@ class AddGeotificationViewController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    // Programmatically added the bar buttons on the right side
     navigationItem.rightBarButtonItems = [addButton, zoomButton]
     addButton.isEnabled = false
   }
+    
+ 
+    
 
   @IBAction func textFieldEditingChanged(sender: UITextField) {
     addButton.isEnabled = !radiusTextField.text!.isEmpty && !noteTextField.text!.isEmpty
@@ -52,6 +80,25 @@ class AddGeotificationViewController: UITableViewController {
   @IBAction func onCancel(sender: AnyObject) {
     dismiss(animated: true, completion: nil)
   }
+  
+  /**
+   func setUpGeofenceForPlayaGrandeBeach() {
+   let geofenceRegionCenter = CLLocationCoordinate2DMake(-38.028308, -57.531508);
+   let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter, radius: 400, identifier: "CurrentLocation");
+   geofenceRegion.notifyOnExit = true;
+   geofenceRegion.notifyOnEntry = true;
+   
+   let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+   let mapRegion = MKCoordinateRegion(center: geofenceRegionCenter, span: span)
+   self.mapView.setRegion(mapRegion, animated: true)
+   
+   let regionCircle = MKCircle(center: geofenceRegionCenter, radius: 400)
+   self.mapView.add(regionCircle)
+   self.mapView.showsUserLocation = true;
+   
+   self.locationManager.startMonitoring(for: geofenceRegion)
+   }
+  */
 
   @IBAction private func onAdd(sender: AnyObject) {
     let coordinate = mapView.centerCoordinate
@@ -62,7 +109,7 @@ class AddGeotificationViewController: UITableViewController {
     delegate?.addGeotificationViewController(controller: self, didAddCoordinate: coordinate, radius: radius, identifier: identifier, note: note!, eventType: eventType)
   }
 
-  @IBAction private func onZoomToCurrentLocation(sender: AnyObject) {
+  @IBAction private func onZoomToCurrentLocation(sender: AnyObject){
     mapView.zoomToUserLocation()
   }
 }
